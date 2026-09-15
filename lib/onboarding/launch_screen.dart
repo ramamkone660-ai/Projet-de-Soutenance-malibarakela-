@@ -16,7 +16,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
   }
 
   _navigateToHome() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
     Navigator.pushReplacement(
       context,

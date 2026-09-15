@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../dashboard/home_page.dart';
+import 'register_1.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,6 +12,17 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  final _formKey = GlobalKey<FormState>();
+
+  void _goToHome() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MyHomePage(title: 'MaliBarakela'),
+      ),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +31,11 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
               const SizedBox(height: 80),
               Image.asset(
                 'assets/images/logo_1.png',
@@ -52,13 +67,16 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: const TextField(
+                child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Email / Numero',
                     labelStyle: TextStyle(color: Colors.black38, fontSize: 14),
                     border: InputBorder.none,
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                   ),
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'Ce champ est obligatoire'
+                      : null,
                 ),
               ),
               const SizedBox(height: 16),
@@ -70,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: TextField(
+                child: TextFormField(
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     labelText: 'Mot de passe',
@@ -89,6 +107,9 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                   ),
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'Ce champ est obligatoire'
+                      : null,
                 ),
               ),
               const SizedBox(height: 16),
@@ -151,7 +172,11 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _goToHome();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF076633),
                     shape: RoundedRectangleBorder(
@@ -174,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
               
               // Continue as Guest Button
               TextButton(
-                onPressed: () {},
+                onPressed: _goToHome,
                 child: const Text(
                   'Continuer Client',
                   style: TextStyle(
@@ -198,7 +223,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Register1Page(),
+                        ),
+                      );
+                    },
                     child: const Text(
                       "S'inscrire",
                       style: TextStyle(
@@ -211,7 +243,8 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               const SizedBox(height: 32),
-            ],
+              ],
+            ),
           ),
         ),
       ),
